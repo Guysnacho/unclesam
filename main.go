@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var filters = []string{"supabase", "tailwind", "tamagui", "digitalocean", "git", "sponsor"}
+
 // Handle error checks
 func check(e error, message string) {
 	if e != nil {
@@ -60,8 +62,20 @@ func process(entry os.DirEntry) {
 
 	for i, row := range rows {
 		// Process all rows. I'd like to do it row by row but let's do it the dumb way first
+		if !check_row(row[description]) {
+			continue
+		}
 		fmt.Printf("#%d | %s | $%s\n", i, row[description], row[amount])
 	}
+}
+
+func check_row(desc string) bool {
+	for _, filter := range filters {
+		if strings.Contains(strings.ToLower(desc), filter) {
+			return true
+		}
+	}
+	return false
 }
 
 func parse_header(header_row []string) (int, int) {
