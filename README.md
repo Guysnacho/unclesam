@@ -8,6 +8,32 @@ Its a lot of work to sift through Excel Spreadsheets and I don't feel like learn
 
 Its painful. I'm fine. INSTEAD, I decided to use it as an excuse to learn some more Go. Found the [go csv package](https://pkg.go.dev/encoding/csv@go1.24.0) was baked into the standard lib (like most things), downloaded my transactions across a couple of cards and accounts, and got to work.
 
+## Usage
+
+### Prerequisites
+
+To use this tool, you'll need
+
+- [Go installed](https://go.dev/)
+- CSVs of your transactions
+  - CSVs need a header row (top row with a label for each column)
+  - Most banks with an online banking feature should have a way to export your transactions, ideally it has a `description` and `amount` header but you can rename that in the CSV or modify the app to look for differently named columns
+
+### Executing
+
+#### Using Go
+
+Add copy/move your downloaded CSVs into the root of the project and run the following
+
+```bash
+#!/bin/bash
+go run
+```
+
+#### Using release
+
+You can find built versions of the tool if you don't feel like installing Go [here](https://github.com/Guysnacho/unclesam/releases)
+
 ## Gameplan
 
 ### Collect files
