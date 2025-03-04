@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
+	"math"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -55,7 +57,7 @@ func process(entry os.DirEntry) {
 	header, err := reader.Read()
 	check(err, "Failed to read csv")
 
-	description, amount := parse_header(header)
+	desc_col, amt_col := parse_header(header)
 
 	rows, err := reader.ReadAll()
 
@@ -63,10 +65,14 @@ func process(entry os.DirEntry) {
 
 	for i, row := range rows {
 		// Process all rows. I'd like to do it row by row but let's do it the dumb way first
-		if !check_filter(row[description], transaction_filters) {
+		if !check_filter(row[desc_col], transaction_filters) {
 			continue
 		}
-		fmt.Printf("#%d | %s | $%s\n", i, row[description], row[amount])
+		amt, err := strconv.ParseFloat(row[amt_col], 64)
+
+		check(err, "Failed to parse float")
+
+		fmt.Printf("#%d | %s | $%f\n", i, row[desc_col], math.Abs(amt))
 	}
 }
 
