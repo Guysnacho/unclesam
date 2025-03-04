@@ -10,7 +10,7 @@ import (
 // Handle error checks
 func check(e error, message string) {
 	if e != nil {
-		fmt.Errorf(message)
+		fmt.Printf("\n\n%s\n", message)
 		panic(e)
 	}
 }
@@ -60,7 +60,7 @@ func process(entry os.DirEntry) {
 
 	for i, row := range rows {
 		// Process all rows. I'd like to do it row by row but let's do it the dumb way first
-		fmt.Printf("#%d | %s | $%s", i, row[description], row[amount])
+		fmt.Printf("#%d | %s | $%s\n", i, row[description], row[amount])
 	}
 }
 
@@ -70,7 +70,7 @@ func parse_header(header_row []string) (int, int) {
 	var amount int = NOT_FOUND
 
 	for idx, header := range header_row {
-		fmt.Printf("%d | %s | length %d\n", idx, header, len(header))
+		fmt.Printf("%d | %s\n", idx, header)
 		if strings.EqualFold(header, "description") {
 			description = idx
 		} else if strings.EqualFold(header, "amount") {
