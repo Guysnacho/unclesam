@@ -10,7 +10,7 @@ import (
 )
 
 var file_filters = []string{".git", ".go", ".mod", ".md", ".png"}
-var transaction_filters = []string{"supabase", "tailwind", "tamagui", "digitalocean", "git", "sponsor"}
+var transaction_filters = []string{"supabase", "tailwind", "tamagui", "digitalocean", "git", "sponsor", "notion"}
 
 // Handle error checks
 func check(e error, message string) {
