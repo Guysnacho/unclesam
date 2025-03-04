@@ -28,6 +28,8 @@ func main() {
 
 	fmt.Println("Searching for CSVs")
 
+	var expenses = 0.00
+
 	for _, file := range data {
 		// Skip project files
 		if check_filter(file.Name(), file_filters) {
@@ -37,14 +39,18 @@ func main() {
 		// Check CSVs
 		if check_filter(file.Name(), []string{".CSV", ".csv"}) {
 			fmt.Println("\n\nProcessing - " + strings.Split(file.Name(), "_")[0])
-			process(file)
+			expenses += process(file)
 		} else {
 			fmt.Println(file.Name() + " - Is not processable")
 		}
 	}
+
+	fmt.Println("\n\n###############################")
+	fmt.Printf("Compiled Expenses - %f\n", expenses)
+	fmt.Println("###############################")
 }
 
-func process(entry os.DirEntry) {
+func process(entry os.DirEntry) float64 {
 	info, err := entry.Info()
 	check(err, "Failed to process file")
 
@@ -63,6 +69,8 @@ func process(entry os.DirEntry) {
 
 	check(err, "Ran into an issue reading CSV")
 
+	var expenses = 0.00
+
 	for i, row := range rows {
 		// Process all rows. I'd like to do it row by row but let's do it the dumb way first
 		if !check_filter(row[desc_col], transaction_filters) {
@@ -73,7 +81,13 @@ func process(entry os.DirEntry) {
 		check(err, "Failed to parse float")
 
 		fmt.Printf("#%d | %s | $%f\n", i, row[desc_col], math.Abs(amt))
+		expenses += math.Abs(amt)
 	}
+
+	fmt.Println("\n\n###############################")
+	fmt.Printf("Total Expenses - %f\n", expenses)
+	fmt.Println("###############################")
+	return expenses
 }
 
 func check_filter(desc string, filters []string) bool {

@@ -46,3 +46,9 @@ So I'm writing this from the point where I've got file reading kinda working.
 
 ![alt text](evidence1.png "Got filtering working")
 </details>
+
+<details>
+<summary>Got expenses generated. Looking good</summary>
+
+![alt text](evidence2.png "Got expenses generated")
+</details>
