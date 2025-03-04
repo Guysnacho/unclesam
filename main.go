@@ -10,6 +10,7 @@ import (
 // Handle error checks
 func check(e error, message string) {
 	if e != nil {
+		fmt.Errorf(message)
 		panic(e)
 	}
 }
@@ -23,6 +24,12 @@ func main() {
 	fmt.Println("Searching for CSV\n")
 
 	for _, file := range data {
+		// Skip project files
+		if strings.Contains(file.Name(), ".git") || strings.Contains(file.Name(), ".go") {
+			continue
+		}
+
+		// Check CSVs
 		if strings.Contains(file.Name(), ".CSV") || strings.Contains(file.Name(), ".csv") {
 			fmt.Println("\n\nProcessing - " + file.Name())
 			process(file)
@@ -36,6 +43,7 @@ func process(entry os.DirEntry) {
 	info, err := entry.Info()
 	check(err, "Failed to process file")
 
+	// Open file
 	file, err := os.Open("./" + info.Name())
 	check(err, "Failed to open file")
 
@@ -51,6 +59,7 @@ func process(entry os.DirEntry) {
 	check(err, "Ran into an issue reading CSV")
 
 	for i, row := range rows {
+		// Process all rows. I'd like to do it row by row but let's do it the dumb way first
 		fmt.Printf("#%d | %s | $%s", i, row[description], row[amount])
 	}
 }
@@ -61,7 +70,7 @@ func parse_header(header_row []string) (int, int) {
 	var amount int = NOT_FOUND
 
 	for idx, header := range header_row {
-		fmt.Println(header)
+		fmt.Printf("%d | %s | length %d\n", idx, header, len(header))
 		if strings.EqualFold(header, "description") {
 			description = idx
 		} else if strings.EqualFold(header, "amount") {
@@ -69,8 +78,9 @@ func parse_header(header_row []string) (int, int) {
 		}
 	}
 
-	if description == NOT_FOUND || amount == NOT_FOUND || true {
+	if description == NOT_FOUND || amount == NOT_FOUND {
 		panic("Couldn't find a column for descriptions or amounts.")
 	}
+
 	return description, amount
 }
